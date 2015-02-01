@@ -1,10 +1,10 @@
 # httpure
 
-There are lots of ways to start up a local server when you're doing web client development. [SimpleHTTPServer](https://docs.python.org/2/library/simplehttpserver.html), [knod](https://github.com/moserrya/knod), [gulp](https://github.com/gulpjs/gulp), [brunch](https://github.com/brunch/brunch), countless others.
+There are lots of ways to start up a local server when you're doing web client development. See [SimpleHTTPServer](https://docs.python.org/2/library/simplehttpserver.html), [knod](https://github.com/moserrya/knod), [gulp](https://github.com/gulpjs/gulp), [brunch](https://github.com/brunch/brunch), and countless others.
 
-Use them.
+Use them, if you can.
 
-This is my personal invented-here server that scratches an itch that only I have.
+This is my personal invented-here tool that scratches an itch that only I have.
 
 `httpure` has very few dependencies. It is written entirely in shell. It only uses common executables, like `file` and `awk`. Things you have. I assume.
 
@@ -12,19 +12,17 @@ It half-heartedly wishes it were fully portable to any POSIX system, but it isn'
 
 # But why?
 
-For fun! Though there is a more reasonable answer.
-
-I really liked the look of [`redo`](https://github.com/apenwarr/redo), and wanted to try it out for web stuff.
+For fun! Though there is a more reasonable answer: I really liked the look of [`redo`](https://github.com/apenwarr/redo), and wanted to try it out for web stuff.
 
 But I didn't want to manually recompile my assets, nor recompile on file save (to prevent the frustrating situation where you request an asset after saving the source file but before you finish generating the target).
 
-Thus it fills a tiny gap between "static file server" and "dynamic HTTP server," and allows me to `redo-ifchanged` files at request time.
+Thus it fills a tiny gap between "static file server" and "dynamic HTTP server," and allows me to `redo-ifchanged` my files at request time.
 
 # Reference
 
 ## The server
 
-It is recommended that you use this in conjunction with [`ncat`](http://nmap.org/ncat/):
+I recommend that you use this in conjunction with [`ncat`](http://nmap.org/ncat/), if you actually want to talk to it from a web browser:
 
     ncat -kl localhost 8080 -c http-handler
 
