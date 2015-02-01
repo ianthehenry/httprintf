@@ -20,3 +20,4 @@ printf " > %s\n" "$request" >&2
 logtime
 printf " < " >&2
 get "$method" "$path" | tee1 /dev/stderr
+printf "\r\n"
