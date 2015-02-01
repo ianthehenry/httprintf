@@ -28,7 +28,7 @@ I recommend that you use this in conjunction with [`ncat`](http://nmap.org/ncat/
 
 Linux netcats may work as well, but BSD netcats (including the one provided with OS X) will not. If you can get it working in a way that can respond to multiple requests in rapid succession, please tell me. I was unable to figure it out.
 
-### [`http-handler`](http-handler)
+### [`http-handler`](scripts/http-handler)
 
 This script expects an HTTP request on stdin, and will try to produce one on stdout.
 
@@ -66,7 +66,7 @@ It won't currently send anything else to the script. Want to do something based 
 
 Sorted roughly in order of usefulness.
 
-### [`http-file`](http-file) (helper)
+### [`http-file`](scripts/http-file) (helper)
 
 Prints an entire HTTP response to stdout based on the filepath provided.
 
@@ -76,7 +76,7 @@ Sends `200` if the file exists, `404` otherwise. Attempts to guess the correct `
 
 A future version may send `301`s for symlinks because that would be pretty whimsical.
 
-### [`http-status`](http-status) (primitive)
+### [`http-status`](scripts/http-status) (primitive)
 
 Prints an HTTP status line to stdout.
 
@@ -85,7 +85,7 @@ Prints an HTTP status line to stdout.
 
 The status code is required. If the reason is omitted, `http-status` will supply a reason based on [RFC 7231](http://tools.ietf.org/html/rfc7231#page-49). It is an error to call `http-status` without a status code, or to call it with an unknown status code without specifying a reason.
 
-### [`http-header`](http-header) (primitive)
+### [`http-header`](scripts/http-header) (primitive)
 
 Prints an HTTP header line to stdout.
 
@@ -93,7 +93,7 @@ Prints an HTTP header line to stdout.
 
 It is an error to omit either the header name or value.
 
-### [`http-body`](http-body) (helper)
+### [`http-body`](scripts/http-body) (helper)
 
 Reads stdin and prints a `Content-Length` header, the header separator line, and the entire contents of stdin to stdout.
 
@@ -101,7 +101,7 @@ Reads stdin and prints a `Content-Length` header, the header separator line, and
 
 May be useful in cases where `http-file` is not sufficient.
 
-### [`http-guess-mime-type`](http-guess-mime-type) (helper)
+### [`http-guess-mime-type`](scripts/http-guess-mime-type) (helper)
 
 Prints the guessed MIME type of the specified file to stdout, followed by a newline.
 
@@ -113,7 +113,7 @@ Tries to guess based on the file's extension, with a dictionary of commonly serv
 
 The file doesn't need to exist so long as the extension is recognized, but the fallback detection requires the file to exist.
 
-### [`http-begin-body`](http-begin-body) (primitive)
+### [`http-begin-body`](scripts/http-begin-body) (primitive)
 
 Prints `\r\n` to stdout.
 
