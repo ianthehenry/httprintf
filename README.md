@@ -54,13 +54,20 @@ In that order. If it's a request for a directory, like `POST /foo/bars/ HTTP/1.1
 
 If no handler is found, it will send a `405` with an empty `Allow` header. If this is emotionally upsetting to you, provide a root `ANY` that sets the correct `Allow` header.
 
-It does not currently special-case `HEAD` or `OPTIONS` requests.
-
 It will log some information about each request and response to stderr.
 
-If the handler invoked returns a non-zero exit code, chaos will reign.
+If it invokes a handler that returns a non-zero exit code, chaos will reign.
 
 It won't currently send anything else to the script. Want to do something based on HTTP headers, or the request body? It's coming soon, but it isn't supported yet.
+
+`http-handler` makes no attempt to protect against escaping the directory from which it's invoke. `GET /../../passwords.txt` will work just fine. This is by design. You could attempt to sanitize the path in your handler script, but if you're using `http-handler` for anything but local development you're doing it wrong.
+
+### Examples
+
+`http-handler` has no default implementations for any methods. A simple static server might look like this, with a single root `GET`:
+
+    #!/usr/bin/sh
+    http-file "$1"
 
 ## The HTTP-generating shell scripts
 
