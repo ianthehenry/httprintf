@@ -18,5 +18,10 @@ if [ -f "$file" ]; then
   http-body <"$file"
 else
   http-status 404
+  http-header "Content-Length" "111"
   http-date
+  http-begin-body
+  echo "<html><head><title>404 Not Found</title></head><body>"
+  echo "<center><h1>404 Not Found</h1></center>"
+  echo "</body></html>"
 fi
