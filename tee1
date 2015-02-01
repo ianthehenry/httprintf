@@ -1,4 +1,0 @@
-#!/usr/bin/env sh
-
-head -n1 | tee "$1"
-cat

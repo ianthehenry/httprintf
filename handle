@@ -6,6 +6,11 @@ logtime() {
   printf %s "$(date "+%H:%M:%S")" >&2
 }
 
+tee1() {
+  head -n1 | tee "$1"
+  cat
+}
+
 method="$(printf %s "$request" | awk '{ print $1 }')"
 path="$(printf %s "$request" | awk '{ sub(/^\//, "", $2); print $2 }')"
 
