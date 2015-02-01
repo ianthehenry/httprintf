@@ -72,9 +72,9 @@ Prints an entire HTTP response to stdout based on the filepath provided.
 
     http-file path/to/index.html
 
-Sends `200` if the file exists, `404` otherwise. Attempts to guess the correct `Content-Type` using `http-guess-mime-type`.
+Sends `200` if the file exists and `404` otherwise. A future version may send `307`s for symlinks because that would be pretty whimsical.
 
-A future version may send `301`s for symlinks because that would be pretty whimsical.
+If the file exists, it sets the `Content-Type` header using `http-guess-mime-type`.
 
 ### [`http-status`](scripts/http-status) (primitive)
 
