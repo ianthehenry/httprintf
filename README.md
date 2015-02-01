@@ -1,4 +1,4 @@
-# httpure
+# httprintf
 
 There are lots of ways to start up a local server when you're doing web client development. See [SimpleHTTPServer](https://docs.python.org/2/library/simplehttpserver.html), [knod](https://github.com/moserrya/knod), [gulp](https://github.com/gulpjs/gulp), [brunch](https://github.com/brunch/brunch), and countless others.
 
@@ -6,7 +6,7 @@ Use them, if you can.
 
 This is my personal invented-here tool that scratches an itch that only I have.
 
-`httpure` has very few dependencies. It is written entirely in shell. It only uses common executables, like `file` and `awk`. Things you have. I assume.
+`httprintf` has very few dependencies. It is written entirely in shell. It only uses common executables, like `file` and `awk`. Things you have. I assume.
 
 It half-heartedly wishes it were fully portable to any POSIX system, but it isn't, because figuring out how to do things in a POSIX-compliant way feels a lot like autoflagellation.
 
@@ -127,5 +127,3 @@ A trivial helper for separating the response headers from the response body. Unn
 - pass request headers and body to handler scripts
 - test that anything actually works
 - homebrew it, maybe
-- better filenames. http- is one bold prefix.
-- better project name. httpure is too obvious.
