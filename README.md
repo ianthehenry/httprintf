@@ -102,11 +102,13 @@ It is an error to omit either the header name or value.
 
 ### [`http-body`](scripts/http-body) (helper)
 
-Reads stdin and prints a `Content-Length` header, the header separator line, and the entire contents of stdin to stdout.
+Reads a file and prints a `Content-Length` header, the header separator line, and the entire contents of stdin to stdout.
 
-    http-body <index.html
+    http-body index.html
 
-May be useful in cases where `http-file` is not sufficient.
+May be helpful in cases where `http-file` is not sufficient.
+
+I'd love for it to take input on stdin, but I can't figure out how to make that work with binary files without first creating a temporary file.
 
 ### [`http-guess-mime-type`](scripts/http-guess-mime-type) (helper)
 

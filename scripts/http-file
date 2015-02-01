@@ -15,7 +15,7 @@ if [ -f "$file" ]; then
   http-status 200
   http-header "Content-Type" "$(http-guess-mime-type "$file")"
   http-date
-  http-body <"$file"
+  http-body "$file"
 else
   http-status 404
   http-header "Content-Length" "111"

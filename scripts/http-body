@@ -1,5 +1,16 @@
 #!/usr/bin/env sh
 
-http-header "Content-Length" "$(wc -c | tr -d ' ')"
+fail() {
+  >&2 echo "http-body: $1"
+  exit 1
+}
+
+if [ -z ${1+x} ]; then
+  fail "must specify file path"
+else
+  file="$1"
+fi
+
+http-header "Content-Length" "$(cat "$1" | wc -c | tr -d ' ')"
 http-begin-body
-cat
+cat "$1"
