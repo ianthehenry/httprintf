@@ -1,0 +1,22 @@
+#!/usr/bin/env sh
+
+fail() {
+  >&2 echo "http-file: $1"
+  exit 1
+}
+
+if [ -z ${1+x} ]; then
+  fail "must specify file path"
+else
+  file="$1"
+fi
+
+if [ -f "$file" ]; then
+  http-status 200
+  http-header "Content-Type" "$(http-guess-mime-type "$file")"
+  http-date
+  http-body <"$file"
+else
+  http-status 404
+  http-date
+fi

@@ -1,0 +1,20 @@
+#!/usr/bin/env sh
+
+fail() {
+  >&2 echo "http-header: $1"
+  exit 1
+}
+
+if [ -z ${1+x} ]; then
+  fail "no header name"
+else
+  name="$1"
+fi
+
+if [ -z ${2+x} ]; then
+  fail "no header value"
+else
+  value="$2"
+fi
+
+printf "%s\r\n" "$name: $value"

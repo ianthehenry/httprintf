@@ -1,0 +1,29 @@
+#!/usr/bin/env sh
+
+fail() {
+  >&2 echo "http-guess-mime-type: $1"
+  exit 1
+}
+
+if [ -z ${1+x} ]; then
+  fail "must specify file path"
+else
+  file="$1"
+fi
+
+basename="$(basename "$file")"
+extension="${basename##*.}"
+
+case $extension in
+  css)  mime="text/css";;
+  html) mime="text/html";;
+  htm)  mime="text/html";;
+  js)   mime="application/javascript";;
+  json) mime="application/json";;
+  png)  mime="image/png";;
+  jpg)  mime="image/jpeg";;
+  jpeg) mime="image/jpeg";;
+  *) mime="$(file -bI "$file")"
+esac
+
+printf "%s\n" "$mime"

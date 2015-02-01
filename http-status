@@ -1,0 +1,63 @@
+#!/usr/bin/env sh
+
+fail() {
+  >&2 echo "http-status: $1"
+  exit 1
+}
+
+if [ -z ${1+x} ]; then
+  fail "no status code specified"
+else
+  code="$1"
+fi
+
+if [ -z ${2+x} ]; then
+  case $code in
+    100) reason="Continue";;
+    101) reason="Switching Protocols";;
+    200) reason="OK";;
+    201) reason="Created";;
+    202) reason="Accepted";;
+    203) reason="Non-Authoritative Information";;
+    204) reason="No Content";;
+    205) reason="Reset Content";;
+    206) reason="Partial Content";;
+    300) reason="Multiple Choices";;
+    301) reason="Moved Permanently";;
+    302) reason="Found";;
+    303) reason="See Other";;
+    304) reason="Not Modified";;
+    305) reason="Use Proxy";;
+    307) reason="Temporary Redirect";;
+    400) reason="Bad Request";;
+    401) reason="Unauthorized";;
+    402) reason="Payment Required";;
+    403) reason="Forbidden";;
+    404) reason="Not Found";;
+    405) reason="Method Not Allowed";;
+    406) reason="Not Acceptable";;
+    407) reason="Proxy Authentication Required";;
+    408) reason="Request Timeout";;
+    409) reason="Conflict";;
+    410) reason="Gone";;
+    411) reason="Length Required";;
+    412) reason="Precondition Failed";;
+    413) reason="Payload Too Large";;
+    414) reason="URI Too Long";;
+    415) reason="Unsupported Media Type";;
+    416) reason="Range Not Satisfiable";;
+    417) reason="Expectation Failed";;
+    426) reason="Upgrade Required";;
+    500) reason="Internal Server Error";;
+    501) reason="Not Implemented";;
+    502) reason="Bad Gateway";;
+    503) reason="Service Unavailable";;
+    504) reason="Gateway Timeout";;
+    505) reason="HTTP Version Not Supported";;
+      *) fail "unknown status code $code\nspecify an explicit reason with:\n  http-status $code \"Reason\"";
+  esac
+else
+  reason="$2"
+fi
+
+printf "HTTP/1.1 %s\r\n" "$code $reason"
