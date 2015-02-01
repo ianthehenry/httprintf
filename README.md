@@ -36,19 +36,19 @@ First it parses the HTTP method and path, then it tries to find a handler file t
 
 So, for a request like `DELETE /foo/bar/baz.json HTTP/1.1`, it will try to invoke:
 
-    ./foo/bar/DELETE ./baz.json
-    ./foo/DELETE ./bar/baz.json
-    ./DELETE ./foo/bar/baz.json
+    ./foo/bar/DELETE ./baz.json DELETE
+    ./foo/DELETE ./bar/baz.json DELETE
+    ./DELETE ./foo/bar/baz.json DELETE
     ./foo/bar/ANY ./baz.json DELETE
     ./foo/ANY ./bar/baz.json DELETE
     ./ANY ./foo/bar/baz.json DELETE
 
 In that order. If it's a request for a directory, like `POST /foo/bars/ HTTP/1.1`, it will try:
 
-    ./foo/bars/POST .
-    ./foo/POST ./bars/
-    ./POST ./foo/bars/
-    ./foo/bars/ANY . POSTf
+    ./foo/bars/POST . POST
+    ./foo/POST ./bars/ POST
+    ./POST ./foo/bars/ POST
+    ./foo/bars/ANY . POST
     ./foo/ANY ./bars/ POST
     ./ANY ./foo/bars/ POST
 
