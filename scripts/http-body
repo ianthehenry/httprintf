@@ -2,4 +2,4 @@
 
 http-header "Content-Length" "$(wc -c | tr -d ' ')"
 http-begin-body
-cat /dev/stdin
+cat
