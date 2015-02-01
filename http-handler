@@ -1,23 +1,94 @@
 #!/usr/bin/env sh
 
-request="$(head -n1)"
-
-logtime() {
-  printf %s "$(date "+%H:%M:%S")" >&2
+log() {
+  echo "$1" >&2
 }
 
 tee1() {
-  head -n1 | tee "$1"
-  cat
+  awk 'NR==1 {print $0 > "/dev/stderr"} {print $0}'
 }
 
+tryinvoke() {
+  if [ -x "$1" ]; then
+    case $# in
+      1) log "  $1"; "$1" | tee1;;
+      2) log "  $1 $2"; "$1" "$2" | tee1;;
+      3) log "  $1 $2 $3"; "$1" "$2" "$3" | tee1;;
+    esac
+    return 0
+  else if [ -f "$1" ]; then
+    log "  $1 exists but is not executable"
+  fi fi
+  return 1
+}
+
+paths() {
+  local method="$1"
+  local path="$2"
+
+  case "$path" in
+    */) local directory=1; path=${path%*/}; local file="";;
+    *)  local directory=0;;
+  esac
+
+  if [ "$directory" -eq 1 ]; then
+    if [ -z ${3+x} ]; then
+      tryinvoke "$path/$method" "."
+      if [ $? -eq 0 ]; then
+        return 0
+      fi
+    else
+      tryinvoke "$path/$method" "." "$3"
+      if [ $? -eq 0 ]; then
+        return 0
+      fi
+    fi
+  fi
+
+  while true; do
+    if [ -z ${file+x} ]; then
+      local file="$(basename "$path")"
+    else
+      local file="$(basename "$path")/$file"
+    fi
+    local path="$(dirname "$path")"
+
+    if [ -z ${3+x} ]; then
+      tryinvoke "$path/$method" "./$file"
+    else
+      tryinvoke "$path/$method" "./$file" "$3"
+    fi
+
+    if [ $? -eq 0 ]; then
+      return 0
+    fi
+    if [ "$path" = "." ]; then
+      break
+    fi
+  done
+  return 1
+}
+
+request="$(head -n1)"
+
 method="$(printf %s "$request" | awk '{ print $1 }')"
-path="$(printf %s "$request" | awk '{ sub(/^\//, "", $2); print $2 }')"
+path="$(printf %s "$request" | awk '{ print $2 }')"
 
-logtime
-printf " > %s\n" "$request" >&2
+printf "%s %s\n" "$(date "+%H:%M:%S")" "$request" >&2
+paths "$method" ".$path"
 
-logtime
-printf " < " >&2
-get "$method" "$path" | tee1 /dev/stderr
-printf "\r\n"
+if [ $? -eq 0 ]; then
+  exit 0
+fi
+paths "ANY" ".$path" "$method"
+if [ $? -eq 0 ]; then
+  exit 0
+fi
+
+log "  no match"
+printf "  " >&2
+http-status 405 | tee1
+http-header "Allow" ""
+http-header "Content-Length" "20"
+http-begin-body
+echo "No matching handler."
