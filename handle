@@ -2,17 +2,17 @@
 
 request="$(head -n1)"
 
-logdate() {
+logtime() {
   printf %s "$(date "+%H:%M:%S")" >&2
 }
 
 method="$(printf %s "$request" | awk '{ print $1 }')"
 path="$(printf %s "$request" | awk '{ sub(/^\//, "", $2); print $2 }')"
 
-logdate
+logtime
 printf " > %s\n" "$request" >&2
 
-logdate
+logtime
 printf " < " >&2
 get "$method" "$path" | tee1 /dev/stderr
 
