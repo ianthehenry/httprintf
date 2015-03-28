@@ -83,6 +83,14 @@ Sends `200` if the file exists and `404` otherwise. A future version may send `3
 
 If the file exists, it sets the `Content-Type` header using `http-guess-mime-type`.
 
+### [`http-response`](scripts/http-response) (helper)
+
+Prints an entire HTTP response to stdout using a body supplied via stdin.
+
+    http-response application/json <foo.json
+
+The first argument specifies the `Content-Type`, which is required. No `Content-Length` header is sent when using `http-response`.
+
 ### [`http-status`](scripts/http-status) (primitive)
 
 Prints an HTTP status line to stdout.

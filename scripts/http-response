@@ -1,0 +1,18 @@
+#!/usr/bin/env sh
+
+fail() {
+  >&2 echo "http-response: $1"
+  exit 1
+}
+
+if [ -z ${1+x} ]; then
+  fail "must specify content-type"
+else
+  mimetype="$1"
+fi
+
+http-status 200
+http-header "Content-Type" "$mimetype"
+http-date
+http-begin-body
+cat
