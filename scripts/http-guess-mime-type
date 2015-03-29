@@ -23,6 +23,7 @@ case $extension in
   png)  mime="image/png";;
   jpg)  mime="image/jpeg";;
   jpeg) mime="image/jpeg";;
+  map)  mime="application/json";;
   *) mime="$(file -bI "$file")"
 esac
 
