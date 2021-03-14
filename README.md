@@ -8,7 +8,7 @@ This is my personal invented-here tool that scratches an itch that only I have.
 
 `httprintf` has very few dependencies. It is written entirely in shell. It only uses common executables, like `file` and `awk`. Things you have. I assume.
 
-It half-heartedly wishes it were fully portable to any POSIX system, but it isn't, because figuring out how to do things in a POSIX-compliant way feels a lot like autoflagellation.
+It's probably not portable and probably only works in `bash`. It, you know, weakly tries.
 
 # But why?
 
@@ -26,7 +26,7 @@ I recommend that you use this in conjunction with [`ncat`](http://nmap.org/ncat/
 
     ncat -kl localhost 8080 -c http-handler
 
-Linux netcats may work as well, but BSD netcats (including the one provided with OS X) will not. If you can get it working in a way that can respond to multiple requests in rapid succession, please tell me. I was unable to figure it out.
+Linux netcats may work as well, but BSD netcats (including the one provided with macOS) will not. If you can get it working in a way that can respond to multiple requests in rapid succession, please tell me. I was unable to figure it out.
 
 ### [`http-handler`](scripts/http-handler)
 
@@ -36,21 +36,21 @@ First it parses the HTTP method and path, then it tries to find a handler file t
 
 So, for a request like `DELETE /foo/bar/baz.json HTTP/1.1`, it will try to invoke:
 
-    ./foo/bar/DELETE ./baz.json DELETE
-    ./foo/DELETE ./bar/baz.json DELETE
-    ./DELETE ./foo/bar/baz.json DELETE
-    ./foo/bar/ANY ./baz.json DELETE
-    ./foo/ANY ./bar/baz.json DELETE
-    ./ANY ./foo/bar/baz.json DELETE
+    ./foo/bar/DELETE ./baz.json         DELETE
+    ./foo/DELETE     ./bar/baz.json     DELETE
+    ./DELETE         ./foo/bar/baz.json DELETE
+    ./foo/bar/ANY    ./baz.json         DELETE
+    ./foo/ANY        ./bar/baz.json     DELETE
+    ./ANY            ./foo/bar/baz.json DELETE
 
 In that order. If it's a request for a directory, like `POST /foo/bars/ HTTP/1.1`, it will try:
 
-    ./foo/bars/POST . POST
-    ./foo/POST ./bars/ POST
-    ./POST ./foo/bars/ POST
-    ./foo/bars/ANY . POST
-    ./foo/ANY ./bars/ POST
-    ./ANY ./foo/bars/ POST
+    ./foo/bars/POST .           POST
+    ./foo/POST      ./bars/     POST
+    ./POST          ./foo/bars/ POST
+    ./foo/bars/ANY  .           POST
+    ./foo/ANY       ./bars/     POST
+    ./ANY           ./foo/bars/ POST
 
 If no handler is found, it will send a `405` with an empty `Allow` header. If this is emotionally upsetting to you, provide a root `ANY` that sets the correct `Allow` header.
 
@@ -58,9 +58,9 @@ It will log some information about each request and response to stderr.
 
 If it invokes a handler that returns a non-zero exit code, chaos will reign.
 
-It won't currently send anything else to the script. Want to do something based on HTTP headers, or the request body? It's coming soon, but it isn't supported yet.
+It won't currently send anything else to the script. Want to do something based on HTTP headers, or the request body? You probably want to use something real.
 
-`http-handler` makes no attempt to protect against escaping the directory from which it's invoke. `GET /../../passwords.txt` will work just fine. This is by design. You could attempt to sanitize the path in your handler script, but if you're using `http-handler` for anything but local development you're doing it wrong.
+`http-handler` makes no attempt to protect against escaping the directory from which it's invoked. `GET /../../passwords.txt` will work just fine. This is by design. You could attempt to sanitize the path in your handler script, but if you're using `http-handler` for anything but local development you're doing it wrong.
 
 ### Examples
 
@@ -143,4 +143,3 @@ A trivial helper for separating the response headers from the response body. Unn
 - clean up http-handler
 - pass request headers and body to handler scripts
 - test that anything actually works
-- homebrew it, maybe
